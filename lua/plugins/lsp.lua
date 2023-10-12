@@ -26,45 +26,16 @@ return {
 
 		-- Server setup here
 		-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-		lspconfig.emmet_language_server.setup({})
-		lspconfig.tsserver.setup({})
-
-		lspconfig.millet.setup({
-			filetype = { "sml" },
-		})
-
-		lspconfig.racket_langserver.setup({
-			on_attach = require("lsp-format").on_attach,
-		})
-
+		
 		lspconfig.clangd.setup({
 			on_attach = require("lsp-format").on_attach,
 			cmd = {
-				"/usr/bin/clangd-17",
+				"/usr/bin/clangd",
 				"--all-scopes-completion",
 				"--background-index",
 				"--cross-file-rename",
 				"--header-insertion=never",
 			},
-		})
-		-- end
-
-		lspconfig.lua_ls.setup({
-			on_init = function(client)
-				local path = client.workspace_folders[1].name
-				if not vim.loop.fs_stat(path .. "/.luarc.json") and not vim.loop.fs_stat(path .. "/.luarc.jsonc") then
-					client.config.settings = vim.tbl_deep_extend("force", client.config.settings.Lua, {
-						runtime = {
-							version = "LuaJIT",
-						},
-						workspace = {
-							library = { vim.env.VIMRUNTIME },
-						},
-					})
-					client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
-				end
-				return true
-			end,
 		})
 	end,
 }
